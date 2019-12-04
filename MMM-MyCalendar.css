@@ -17,11 +17,14 @@
 .MMM-MyCalendar .date {
   vertical-align: top;
   text-align: left;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .MMM-MyCalendar .time {
   vertical-align: top;
   text-align: right;
+  padding-right: 10px;
 }
 
 .MMM-MyCalendar .title {
