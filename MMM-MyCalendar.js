@@ -476,13 +476,13 @@ Module.register("MMM-MyCalendar", {
             return "lightgreen";
         }
         else if (psEventTitle.indexOf("Cancer Care Clinic") > -1) {
-            return "lightblue";
+            return "yellow";
         }
         else if (psEventTitle.indexOf("SSRC Meeting") > -1) {
-            return "purple";
+            return "magenta";
         }
         else if (psEventTitle.indexOf("Reiki Circle") > -1) {
-            return "turquoise";
+            return "lightblue";
         }
         else {
             return "#fff";
