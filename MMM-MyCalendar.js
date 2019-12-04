@@ -195,8 +195,6 @@ Module.register("MMM-MyCalendar", {
 
             var event = events[iIndex];
 
-            Log.log("[x] calendar entry...");
-
             // ---------------------------------------------------------- //
             // ROW: calendar entry
             // ---------------------------------------------------------- //
@@ -206,8 +204,6 @@ Module.register("MMM-MyCalendar", {
             // colorize recurring events
             oEventRow.style.color = this.colorizeEventTitle(event.title);
 
-
-            Log.log("[x] include Calendar Entry Icon...");
 
             // ---------------------------------------------------------- //
             // CELL: include Calendar Entry Icon
@@ -231,7 +227,6 @@ Module.register("MMM-MyCalendar", {
 
             oEventRow.appendChild(oEventIconCell);
 
-            Log.log("[x] include Calendar Entry Date...");
 
             // ---------------------------------------------------------- //
             // CELL: include Calendar Entry Date
@@ -246,13 +241,12 @@ Module.register("MMM-MyCalendar", {
 
             oEventRow.appendChild(oEventDateCell);
 
-            Log.log("[x] include Calendar Entry Date...");
 
             // ---------------------------------------------------------- //
             // CELL: include Calendar Entry Time
             // ---------------------------------------------------------- //
             var oEventTimeCell = document.createElement("td");
-            oEventTimeCell.className = "time light " + timeClass;
+            oEventTimeCell.className = "time light";
             oEventTimeCell.style.border = "1px solid green";
 
             if (event.fullDayEvent) {
@@ -264,7 +258,6 @@ Module.register("MMM-MyCalendar", {
 
             oEventRow.appendChild(oEventTimeCell);
 
-            Log.log("[x] include Calendar Entry Title...");
 
             // ---------------------------------------------------------- //
             // CELL: include Calendar Entry Title
@@ -276,8 +269,6 @@ Module.register("MMM-MyCalendar", {
 
             oEventRow.appendChild(oEventTitleCell);
 
-
-            Log.log("[x] include Event Row...");
 
             oCalendarTable.appendChild(oEventRow);
 
