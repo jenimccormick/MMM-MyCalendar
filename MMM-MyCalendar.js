@@ -7,30 +7,30 @@ Module.register("MMM-MyCalendar", {
 	// Default module config
 	// ------------------------------------------------------------------------------------------- //
 	defaults: {
-		maximumEntries: 10, // Total Maximum Entries
+		maximumEntries: 25, // Total Maximum Entries
 		maximumNumberOfDays: 365,
 		displaySymbol: true,
 		defaultSymbol: "calendar", // Fontawesome Symbol see http://fontawesome.io/cheatsheet/
 		showLocation: false,
 		displayRepeatingCountTitle: false,
 		defaultRepeatingCountTitle: "",
-		maxTitleLength: 25,
+		maxTitleLength: 35,
 		wrapEvents: false, // wrap events to multiple lines breaking at maxTitleLength
 		maxTitleLines: 3,
 		fetchInterval: 5 * 60 * 1000, // Update every 5 minutes.
 		animationSpeed: 2000,
-		fade: true,
+		fade: false,
 		urgency: 7,
 		timeFormat: "relative",
-		dateFormat: "MMM Do",
+		dateFormat: "DD MMM",
 		dateEndFormat: "LT",
-		fullDayEventDateFormat: "MMM Do",
-		showEnd: false,
+		fullDayEventDateFormat: "DD MMM",
+		showEnd: true,
 		getRelative: 6,
 		fadePoint: 0.25, // Start on 1/4th of the list.
 		hidePrivate: false,
 		hideOngoing: false,
-		colored: false,
+		colored: true,
 		coloredSymbolOnly: false,
 		tableClass: "small",
 		calendars: [
@@ -40,14 +40,14 @@ Module.register("MMM-MyCalendar", {
 			},
 		],
 		titleReplace: {
-			"De verjaardag van ": "",
-			"'s birthday": ""
+			"class level": "Class Level",
+			"practitioner": "Practitioner"
 		},
 		broadcastEvents: true,
 		excludedEvents: [],
 		sliceMultiDayEvents: false,
 		broadcastPastEvents: false,
-		nextDaysRelative: false
+		nextDaysRelative: false,
 	},
 
 	// ------------------------------------------------------------------------------------------- //
@@ -83,7 +83,7 @@ Module.register("MMM-MyCalendar", {
 
 		Log.log("Starting module: '" + this.name + "'...");
 
-		// Set locale.
+		// Set locale
 		moment.updateLocale(config.language, this.getLocaleSpecification(config.timeFormat));
 
 		for (var c in this.config.calendars) {
@@ -173,297 +173,106 @@ Module.register("MMM-MyCalendar", {
 
 		var events = this.createEventList();
 
-		var wrapper = document.createElement("table");
-		wrapper.className = this.config.tableClass;
-		wrapper.style.border = '1px solid #ffffff';
+		var oCalendarTable = document.createElement("table");
+		oCalendarTable.className = this.config.tableClass;
+		oCalendarTable.style.border = '1px solid #ffffff';
 
 		if (events.length === 0) {
-			wrapper.innerHTML = (this.loaded) ? this.translate("EMPTY") : this.translate("LOADING");
-			wrapper.className = this.config.tableClass + " dimmed";
-			return wrapper;
+			oCalendarTable.innerHTML = (this.loaded) ? this.translate("EMPTY") : this.translate("LOADING");
+			oCalendarTable.className = this.config.tableClass + " dimmed";
+			return oCalendarTable;
 		}
 
 		if (this.config.fade && this.config.fadePoint < 1) {
 			if (this.config.fadePoint < 0) {
 				this.config.fadePoint = 0;
 			}
-			var startFade = events.length * this.config.fadePoint;
-			var fadeSteps = events.length - startFade;
 		}
-
-		var currentFadeStep = 0;
-		var lastSeenDate = "";
 
 		for (var e in events) {
 
 			var event = events[e];
 
+			// ----------------------------------------------------------------------------------- //
+			// ROW: calendar entry 
+			// ----------------------------------------------------------------------------------- //
+			var oEventRow = document.createElement("tr");
+			oEventRow.className = "normal";
+			oEventRow.style.border = '1px solid #ffffff';
+			// colorize recurring events
+			oEventRow.style.color = this.colorizeEventTitle(event.title);
+
+
+			// ----------------------------------------------------------------------------------- //
+			// CELL: include Calendar Entry Icon
+			// ----------------------------------------------------------------------------------- //
+			var oEventIconCell = document.createElement("td");
+			oEventIconCell.className = "symbol align-right " + this.symbolClassForUrl(event.url);
+
+			var symbols = this.symbolsForUrl(event.url);
+			if (typeof symbols === "string") {
+				symbols = [symbols];
+			}
+
+			for (var i = 0; i < symbols.length; i++) {
+				var oIconSpan = document.createElement("span");
+				oIconSpan.className = "fa fa-fw fa-" + symbols[i];
+				if (i > 0) {
+					oIconSpan.style.paddingLeft = "3px";
+				}
+				oEventIconCell.appendChild(oIconSpan);
+			}
+
+			oEventRow.appendChild(oEventIconCell);
+
+
+			// ----------------------------------------------------------------------------------- //
+			// CELL: include Calendar Entry Date
+			// ----------------------------------------------------------------------------------- //
+			var oEventDateCell = document.createElement("td");
+			oEventDateCell.className = "date bright";
+			oEventDateCell.style.border = '1px solid pink';
+
 			var dateAsString = moment(event.startDate, "x").format(this.config.dateFormat);
 
-			// ROW: calendar entry 
-			var eventWrapper = document.createElement("tr");
-			eventWrapper.className = "normal";
-			eventWrapper.style.border = '1px solid #ffffff';
+			oEventDateCell.innerHTML = dateAsString;
 
-			// ------------------------------------------------------------------------------------------- //
-			// ------------------------------------------------------------------------------------------- //
-			// TODO: color by regex or set class by regex
-			// ------------------------------------------------------------------------------------------- //
-			// ------------------------------------------------------------------------------------------- //
+			oEventRow.appendChild(oEventDateCell);
 
-
-			if (this.config.colored && !this.config.coloredSymbolOnly) {
-				eventWrapper.style.color = this.colorForUrl(event.url);
-			}
 
 			// ----------------------------------------------------------------------------------- //
-			// include Calendar Entry Icon
+			// CELL: include Calendar Entry Time
 			// ----------------------------------------------------------------------------------- //
-			if (this.config.displaySymbol) {
-
-				var symbolWrapper = document.createElement("td");
-				symbolWrapper.className = "symbol align-right " + this.symbolClassForUrl(event.url);
-				symbolWrapper.style.border = '1px solid blue';
-
-				var symbols = this.symbolsForUrl(event.url);
-				if (typeof symbols === "string") {
-					symbols = [symbols];
-				}
-
-				for (var i = 0; i < symbols.length; i++) {
-					var symbol = document.createElement("span");
-					symbol.className = "fa fa-fw fa-" + symbols[i];
-					if (i > 0) {
-						symbol.style.paddingLeft = "3px";
-					}
-					symbolWrapper.appendChild(symbol);
-				}
-
-				eventWrapper.appendChild(symbolWrapper);
-
-			}
-
-			// ----------------------------------------------------------------------------------- //
-			// include Calendar Entry Title
-			// ----------------------------------------------------------------------------------- //
-			var titleWrapper = document.createElement("td");
-			titleWrapper.style.border = '1px solid red';
-
-			var repeatingCountTitle = "";
-
-			if (this.config.displayRepeatingCountTitle && event.firstYear !== undefined) {
-
-				repeatingCountTitle = this.countTitleForUrl(event.url);
-
-				if (repeatingCountTitle !== "") {
-
-					var thisYear = new Date(parseInt(event.startDate)).getFullYear();
-					var yearDiff = thisYear - event.firstYear;
-
-					repeatingCountTitle = ", " + yearDiff + ". " + repeatingCountTitle;
-
-				}
-
-			}
-
-			titleWrapper.innerHTML = this.titleTransform(event.title) + repeatingCountTitle;
-
-			var titleClass = this.titleClassForUrl(event.url);
-
-			if (!this.config.colored) {
-				titleWrapper.className = "title bright " + titleClass;
-			}
-			else {
-				titleWrapper.className = "title " + titleClass;
-			}
-
-			// ----------------------------------------------------------------------------------- //
-			// include Calendar Entry Time
-			// ----------------------------------------------------------------------------------- //
-			var timeWrapper = document.createElement("td");
-			timeWrapper.style.border = '1px solid green';
-
-			eventWrapper.appendChild(titleWrapper);
-
-			var now = new Date();
-			// Define second, minute, hour, and day variables
-			var oneSecond = 1000; // 1,000 milliseconds
-			var oneMinute = oneSecond * 60;
-			var oneHour = oneMinute * 60;
-			var oneDay = oneHour * 24;
+			var oEventTimeCell = document.createElement("td");
+			oEventTimeCell.className = "time light " + timeClass;
+			oEventTimeCell.style.border = '1px solid green';
 
 			if (event.fullDayEvent) {
-
-				//subtract one second so that fullDayEvents end at 23:59:59, and not at 0:00:00 one the next day
-				event.endDate -= oneSecond;
-
-				if (event.today) {
-
-					timeWrapper.innerHTML = this.capFirst(this.translate("TODAY"));
-
-				}
-				else if (event.startDate - now < oneDay && event.startDate - now > 0) {
-
-					timeWrapper.innerHTML = this.capFirst(this.translate("TOMORROW"));
-
-				}
-				else if (event.startDate - now < 2 * oneDay && event.startDate - now > 0) {
-
-					if (this.translate("DAYAFTERTOMORROW") !== "DAYAFTERTOMORROW") {
-						timeWrapper.innerHTML = this.capFirst(this.translate("DAYAFTERTOMORROW"));
-					}
-					else {
-						timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").fromNow());
-					}
-
-				}
-				else {
-
-					/* Check to see if the user displays absolute or relative dates with their events
-					* Also check to see if an event is happening within an 'urgency' time frameElement
-					* For example, if the user set an .urgency of 7 days, those events that fall within that
-					* time frame will be displayed with 'in xxx' time format or moment.fromNow()
-					*
-					* Note: this needs to be put in its own function, as the whole thing repeats again verbatim
-					*/
-					if (this.config.timeFormat === "absolute") {
-
-						if ((this.config.urgency > 1) && (event.startDate - now < (this.config.urgency * oneDay))) {
-							// This event falls within the config.urgency period that the user has set
-							timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").from(moment().format("YYYYMMDD")));
-						}
-						else {
-							timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").format(this.config.fullDayEventDateFormat));
-						}
-
-					}
-					else {
-						timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").from(moment().format("YYYYMMDD")));
-					}
-
-				}
-
-				if (this.config.showEnd) {
-					timeWrapper.innerHTML += "-";
-					timeWrapper.innerHTML += this.capFirst(moment(event.endDate, "x").format(this.config.fullDayEventDateFormat));
-				}
-
+				oEventTimeCell.innerHTML = "All Day";
 			}
 			else {
-
-				if (event.startDate >= new Date()) {
-
-					if (event.startDate - now < 2 * oneDay) {
-
-						// This event is within the next 48 hours (2 days)
-						if (event.startDate - now < this.config.getRelative * oneHour) {
-							// If event is within 6 hour, display 'in xxx' time format or moment.fromNow()
-							timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").fromNow());
-						}
-						else {
-
-							if (this.config.timeFormat === "absolute" && !this.config.nextDaysRelative) {
-								timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").format(this.config.dateFormat));
-							}
-							else {
-								// Otherwise just say 'Today/Tomorrow at such-n-such time'
-								timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").calendar());
-							}
-
-						}
-
-					}
-					else {
-
-						/* Check to see if the user displays absolute or relative dates with their events
-						* Also check to see if an event is happening within an 'urgency' time frameElement
-						* For example, if the user set an .urgency of 7 days, those events that fall within that
-						* time frame will be displayed with 'in xxx' time format or moment.fromNow()
-						*
-						* Note: this needs to be put in its own function, as the whole thing repeats again verbatim
-						*/
-						if (this.config.timeFormat === "absolute") {
-
-							if ((this.config.urgency > 1) && (event.startDate - now < (this.config.urgency * oneDay))) {
-								// This event falls within the config.urgency period that the user has set
-								timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").fromNow());
-							}
-							else {
-								timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").format(this.config.dateFormat));
-							}
-
-						}
-						else {
-							timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").fromNow());
-						}
-
-					}
-
-				}
-				else {
-
-					timeWrapper.innerHTML = this.capFirst(
-						this.translate("RUNNING", {
-							fallback: this.translate("RUNNING") + " {timeUntilEnd}",
-							timeUntilEnd: moment(event.endDate, "x").fromNow(true)
-						})
-					);
-
-				}
-
-				if (this.config.showEnd) {
-					timeWrapper.innerHTML += "-";
-					timeWrapper.innerHTML += this.capFirst(moment(event.endDate, "x").format(this.config.dateEndFormat));
-				}
-
-				var timeClass = this.timeClassForUrl(event.url);
-				timeWrapper.className = "time light " + timeClass;
-
-				eventWrapper.appendChild(timeWrapper);
-
+				oEventTimeCell.innerHTML = moment(event.startDate, "x").format("LT");
 			}
 
-			wrapper.appendChild(eventWrapper);
+			oEventRow.appendChild(oEventTimeCell);
 
-			// Create fade effect.
-			if (e >= startFade) {
-				currentFadeStep = e - startFade;
-				eventWrapper.style.opacity = 1 - (1 / fadeSteps * currentFadeStep);
-			}
 
-			if (this.config.showLocation) {
+			// ----------------------------------------------------------------------------------- //
+			// CELL: include Calendar Entry Title
+			// ----------------------------------------------------------------------------------- //
+			var oEventTitleCell = document.createElement("td");
+			oEventTitleCell.className = "title bright";
+			oEventTitleCell.style.border = '1px solid red';
+			oEventTitleCell.innerHTML = this.titleTransform(event.title);
 
-				if (event.location !== false) {
+			oEventRow.appendChild(oEventTitleCell);
 
-					var locationRow = document.createElement("tr");
-					locationRow.className = "normal xsmall light";
 
-					if (this.config.displaySymbol) {
-						var symbolCell = document.createElement("td");
-						locationRow.appendChild(symbolCell);
-					}
-
-					var descCell = document.createElement("td");
-					descCell.className = "location";
-					descCell.colSpan = "2";
-					descCell.innerHTML = event.location;
-
-					locationRow.appendChild(descCell);
-
-					wrapper.appendChild(locationRow);
-
-					if (e >= startFade) {
-						currentFadeStep = e - startFade;
-						locationRow.style.opacity = 1 - (1 / fadeSteps * currentFadeStep);
-					}
-
-				}
-
-			}
+			oCalendarTable.appendChild(oEventRow);
 
 		}
 
-		return wrapper;
+		return oCalendarTable;
 
 	},
 
@@ -635,10 +444,10 @@ Module.register("MMM-MyCalendar", {
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/* createEventList(url)
+	/**
 	 * Requests node helper to add calendar url.
 	 *
-	 * argument url string - Url to add.
+	 * @param url {string} - Url to add.
 	 */
 	// ------------------------------------------------------------------------------------------- //
 	addCalendar: function (url, auth, calendarConfig) {
@@ -660,12 +469,10 @@ Module.register("MMM-MyCalendar", {
 
 	// ------------------------------------------------------------------------------------------- //
 	/**
-	 * symbolsForUrl(url)
 	 * Retrieves the symbols for a specific url.
 	 *
-	 * argument url string - Url to look for.
-	 *
-	 * return string/array - The Symbols
+	 * @param url {string} - Url to look for.
+	 * @returns {string}/{array} - The Symbols
 	 */
 	// ------------------------------------------------------------------------------------------- //
 	symbolsForUrl: function (url) {
@@ -676,12 +483,10 @@ Module.register("MMM-MyCalendar", {
 
 	// ------------------------------------------------------------------------------------------- //
 	/**
-	 * symbolClassForUrl(url)
 	 * Retrieves the symbolClass for a specific url.
 	 *
-	 * @param url string - Url to look for.
-	 *
-	 * @returns string
+	 * @param url {string} - Url to look for.
+	 * @returns {string}
 	 */
 	// ------------------------------------------------------------------------------------------- //
 	symbolClassForUrl: function (url) {
@@ -691,44 +496,33 @@ Module.register("MMM-MyCalendar", {
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/**
-	 * titleClassForUrl(url)
-	 * Retrieves the titleClass for a specific url.
-	 *
-	 * @param url string - Url to look for.
-	 *
-	 * @returns string
-	 */
 	// ------------------------------------------------------------------------------------------- //
-	titleClassForUrl: function (url) {
+	colorizeEventTitle: function (psEventTitle) {
 
-		return this.getCalendarProperty(url, "titleClass", "");
+		if (psEventTitle.indexOf("Reiki Clinic") > -1) {
+			return "lightgreen";
+		}
+		else if (psEventTitle.indexOf("Cancer Care Clinic") > -1) {
+			return "lightblue";
+		}
+		else if (psEventTitle.indexOf("SSRC Meeting") > -1) {
+			return "purple";
+		}
+		else if (psEventTitle.indexOf("Reiki Circle") > -1) {
+			return "turquoise";
+		}
+		else {
+			return "#fff";
+		}
 
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/**
-	 * timeClassForUrl(url)
-	 * Retrieves the timeClass for a specific url.
-	 *
-	 * @param url string - Url to look for.
-	 *
-	 * @returns string
-	 */
-	// ------------------------------------------------------------------------------------------- //
-	timeClassForUrl: function (url) {
-
-		return this.getCalendarProperty(url, "timeClass", "");
-
-	},
-
-	// ------------------------------------------------------------------------------------------- //
-	/* calendarNameForUrl(url)
+	/** 
 	 * Retrieves the calendar name for a specific url.
 	 *
-	 * argument url string - Url to look for.
-	 *
-	 * return string - The name of the calendar
+	 * @param url {string} - Url to look for.
+	 * @returns {string} - The name of the calendar
 	 */
 	// ------------------------------------------------------------------------------------------- //
 	calendarNameForUrl: function (url) {
@@ -738,12 +532,11 @@ Module.register("MMM-MyCalendar", {
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/* colorForUrl(url)
+	/**
 	 * Retrieves the color for a specific url.
 	 *
-	 * argument url string - Url to look for.
-	 *
-	 * return string - The Color
+	 * @param url {string} - Url to look for.
+	 * @returnS {string} - The Color
 	 */
 	// ------------------------------------------------------------------------------------------- //
 	colorForUrl: function (url) {
@@ -753,29 +546,13 @@ Module.register("MMM-MyCalendar", {
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/* countTitleForUrl(url)
-	 * Retrieves the name for a specific url.
-	 *
-	 * argument url string - Url to look for.
-	 *
-	 * return string - The Symbol
-	 */
-	// ------------------------------------------------------------------------------------------- //
-	countTitleForUrl: function (url) {
-
-		return this.getCalendarProperty(url, "repeatingCountTitle", this.config.defaultRepeatingCountTitle);
-
-	},
-
-	// ------------------------------------------------------------------------------------------- //
-	/* getCalendarProperty(url, property, defaultValue)
+	/**
 	 * Helper method to retrieve the property for a specific url.
 	 *
-	 * argument url string - Url to look for.
-	 * argument property string - Property to look for.
-	 * argument defaultValue string - Value if property is not found.
-	 *
-	 * return string - The Property
+	 * @param url {string} - Url to look for.
+	 * @param property {string} - Property to look for.
+	 * @param defaultValue {string} - Value if property is not found.
+	 * @returns {string} - The Property
 	 */
 	// ------------------------------------------------------------------------------------------- //
 	getCalendarProperty: function (url, property, defaultValue) {
@@ -865,10 +642,7 @@ Module.register("MMM-MyCalendar", {
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/* capFirst(string)
-	 * Capitalize the first letter of a string
-	 * Return capitalized string
-	 */
+	// @returns {string} Capitalize the first letter of a string
 	// ------------------------------------------------------------------------------------------- //
 	capFirst: function (string) {
 
@@ -877,15 +651,13 @@ Module.register("MMM-MyCalendar", {
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/* titleTransform(title)
-	 * Transforms the title of an event for usage.
-	 * Replaces parts of the text as defined in config.titleReplace.
-	 * Shortens title based on config.maxTitleLength and config.wrapEvents
-	 *
-	 * argument title string - The title to transform.
-	 *
-	 * return string - The transformed title.
-	 */
+	// Transforms the title of an event for usage.
+	// 
+	// Replaces parts of the text as defined in config.titleReplace.
+	// Shortens title based on config.maxTitleLength and config.wrapEvents
+	//
+	// @param title {string} The title to transform.
+	// @returns {string} The transformed title.
 	// ------------------------------------------------------------------------------------------- //
 	titleTransform: function (title) {
 
@@ -910,10 +682,8 @@ Module.register("MMM-MyCalendar", {
 	},
 
 	// ------------------------------------------------------------------------------------------- //
-	/* broadcastEvents()
-	 * Broadcasts the events to all other modules for reuse.
-	 * The all events available in one array, sorted on startdate.
-	 */
+	// Broadcasts the events to all other modules for reuse.
+	// The all events available in one array, sorted on startdate.
 	// ------------------------------------------------------------------------------------------- //
 	broadcastEvents: function () {
 
