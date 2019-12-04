@@ -175,15 +175,10 @@ Module.register("MMM-MyCalendar", {
     // ---------------------------------------------------------- //
     getDom: function () {
 
-        Log.log("[x] getDom()...");
-
         var events = this.createEventList();
 
         var oCalendarTable = document.createElement("table");
         oCalendarTable.className = this.config.tableClass;
-        oCalendarTable.style.border = "1px solid #ffffff";
-
-        Log.log("[x] events.length: " + events.length);
 
         if (events.length === 0) {
             oCalendarTable.innerHTML = (this.loaded) ? this.translate("EMPTY") : this.translate("LOADING");
@@ -200,8 +195,6 @@ Module.register("MMM-MyCalendar", {
             // ---------------------------------------------------------- //
             var oEventRow = document.createElement("tr");
             oEventRow.className = "normal";
-            oEventRow.style.border = "1px solid #ffffff";
-            // colorize recurring events
             oEventRow.style.color = this.colorizeEventTitle(event.title);
 
 
@@ -210,20 +203,9 @@ Module.register("MMM-MyCalendar", {
             // ---------------------------------------------------------- //
             var oEventIconCell = document.createElement("td");
             oEventIconCell.className = "symbol align-right " + this.symbolClassForUrl(event.url);
-
-            var symbols = this.symbolsForUrl(event.url);
-            if (typeof symbols === "string") {
-                symbols = [symbols];
-            }
-
-            for (var i = 0; i < symbols.length; i++) {
-                var oIconSpan = document.createElement("span");
-                oIconSpan.className = "fa fa-fw fa-" + symbols[i];
-                if (i > 0) {
-                    oIconSpan.style.paddingLeft = "3px";
-                }
-                oEventIconCell.appendChild(oIconSpan);
-            }
+			var oIconSpan = document.createElement("span");
+			oIconSpan.className = "fa fa-fw fa-calendar";
+			oEventIconCell.appendChild(oIconSpan);
 
             oEventRow.appendChild(oEventIconCell);
 
@@ -232,12 +214,8 @@ Module.register("MMM-MyCalendar", {
             // CELL: include Calendar Entry Date
             // ---------------------------------------------------------- //
             var oEventDateCell = document.createElement("td");
-            oEventDateCell.className = "date bright";
-            oEventDateCell.style.border = "1px solid pink";
-
-            var dateAsString = moment(event.startDate, "x").format(this.config.dateFormat);
-
-            oEventDateCell.innerHTML = dateAsString;
+            oEventDateCell.className = "date";
+            oEventDateCell.innerHTML = moment(event.startDate, "x").format(this.config.dateFormat);
 
             oEventRow.appendChild(oEventDateCell);
 
@@ -246,9 +224,7 @@ Module.register("MMM-MyCalendar", {
             // CELL: include Calendar Entry Time
             // ---------------------------------------------------------- //
             var oEventTimeCell = document.createElement("td");
-            oEventTimeCell.className = "time light";
-            oEventTimeCell.style.border = "1px solid green";
-
+            oEventTimeCell.className = "time";
             if (event.fullDayEvent) {
                 oEventTimeCell.innerHTML = "All Day";
             }
@@ -263,8 +239,7 @@ Module.register("MMM-MyCalendar", {
             // CELL: include Calendar Entry Title
             // ---------------------------------------------------------- //
             var oEventTitleCell = document.createElement("td");
-            oEventTitleCell.className = "title bright";
-            oEventTitleCell.style.border = "1px solid red";
+            oEventTitleCell.className = "title";
             oEventTitleCell.innerHTML = this.titleTransform(event.title);
 
             oEventRow.appendChild(oEventTitleCell);
