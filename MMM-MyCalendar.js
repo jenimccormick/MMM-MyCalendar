@@ -171,8 +171,7 @@ Module.register("MMM-MyCalendar", {
 
 		var wrapper = document.createElement("table");
 		wrapper.className = this.config.tableClass;
-		wrapper.style.width  = '100px';
-		wrapper.style.border = '1px solid black';
+		wrapper.style.border = '1px solid #ffffff';
 
 		if (events.length === 0) {
 			wrapper.innerHTML = (this.loaded) ? this.translate("EMPTY") : this.translate("LOADING");
