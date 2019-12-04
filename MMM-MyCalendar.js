@@ -70,7 +70,7 @@ Module.register("MMM-MyCalendar", {
 	getTranslations: function () {
 
 		// The translations for the default modules are defined in the core translation files.
-		// Therefor we can just return false. Otherwise we should have returned a dictionary.
+		// Therefore we can just return false. Otherwise we should have returned a dictionary.
 		// If you're trying to build your own module including translations, check out the documentation.
 		return false;
 
@@ -81,7 +81,7 @@ Module.register("MMM-MyCalendar", {
 	// ------------------------------------------------------------------------------------------- //
 	start: function () {
 
-		Log.log("Starting module: '" + this.name + "'...");
+		console.log("Starting module: '" + this.name + "'...");
 
 		// Set locale
 		moment.updateLocale(config.language, this.getLocaleSpecification(config.timeFormat));
@@ -159,7 +159,7 @@ Module.register("MMM-MyCalendar", {
 			Log.error("Calendar Error. Incorrect url: " + payload.url);
 		}
 		else {
-			Log.log("Calendar received an unknown socket notification: " + notification);
+			console.log("Calendar received an unknown socket notification: " + notification);
 		}
 
 		this.updateDom(this.config.animationSpeed);
@@ -171,7 +171,7 @@ Module.register("MMM-MyCalendar", {
 	// ------------------------------------------------------------------------------------------- //
 	getDom: function () {
 
-		Log.log("[x] getDom()...");
+		console.log("[x] getDom()...");
 
 		var events = this.createEventList();
 
@@ -179,7 +179,7 @@ Module.register("MMM-MyCalendar", {
 		oCalendarTable.className = this.config.tableClass;
 		oCalendarTable.style.border = '1px solid #ffffff';
 
-		Log.log("[x] events.length: " + events.length);
+		console.log("[x] events.length: " + events.length);
 
 		if (events.length === 0) {
 			oCalendarTable.innerHTML = (this.loaded) ? this.translate("EMPTY") : this.translate("LOADING");
@@ -191,7 +191,7 @@ Module.register("MMM-MyCalendar", {
 
 			var event = events[iIndex];
 
-			Log.log("[x] calendar entry...");
+			console.log("[x] calendar entry...");
 
 			// ----------------------------------------------------------------------------------- //
 			// ROW: calendar entry 
@@ -203,7 +203,7 @@ Module.register("MMM-MyCalendar", {
 			oEventRow.style.color = this.colorizeEventTitle(event.title);
 
 
-			Log.log("[x] include Calendar Entry Icon...");
+			console.log("[x] include Calendar Entry Icon...");
 
 			// ----------------------------------------------------------------------------------- //
 			// CELL: include Calendar Entry Icon
@@ -227,7 +227,7 @@ Module.register("MMM-MyCalendar", {
 
 			oEventRow.appendChild(oEventIconCell);
 
-			Log.log("[x] include Calendar Entry Date...");
+			console.log("[x] include Calendar Entry Date...");
 
 			// ----------------------------------------------------------------------------------- //
 			// CELL: include Calendar Entry Date
@@ -242,7 +242,7 @@ Module.register("MMM-MyCalendar", {
 
 			oEventRow.appendChild(oEventDateCell);
 
-			Log.log("[x] include Calendar Entry Date...");
+			console.log("[x] include Calendar Entry Date...");
 
 			// ----------------------------------------------------------------------------------- //
 			// CELL: include Calendar Entry Time
@@ -260,7 +260,7 @@ Module.register("MMM-MyCalendar", {
 
 			oEventRow.appendChild(oEventTimeCell);
 
-			Log.log("[x] include Calendar Entry Title...");
+			console.log("[x] include Calendar Entry Title...");
 
 			// ----------------------------------------------------------------------------------- //
 			// CELL: include Calendar Entry Title
@@ -273,7 +273,7 @@ Module.register("MMM-MyCalendar", {
 			oEventRow.appendChild(oEventTitleCell);
 
 
-			Log.log("[x] include Event Row...");
+			console.log("[x] include Event Row...");
 
 			oCalendarTable.appendChild(oEventRow);
 
