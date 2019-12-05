@@ -1,3 +1,10 @@
+/*
+ * MMM-MyCalendar.
+ */
+
+.MMM-MyCalendar {
+  width: 100%;
+}
 
 .MMM-MyCalendar .symbol {
   width: 5%;
@@ -17,6 +24,7 @@
 
 .MMM-MyCalendar .date {
   width: 10%;
+  white-space: nowrap;
   vertical-align: top;
   text-align: left;
   text-transform: uppercase;
@@ -24,14 +32,15 @@
 }
 
 .MMM-MyCalendar .time {
-  width: 10%;
+  width: 15%;
+  white-space: nowrap;
   vertical-align: top;
   text-align: right;
   padding-right: 35px;
 }
 
 .MMM-MyCalendar .title {
-  width: 75%;
+  width: 70%;
   vertical-align: top;
   text-align: left;
 }
