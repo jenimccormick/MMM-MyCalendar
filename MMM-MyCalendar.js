@@ -22,9 +22,9 @@ Module.register("MMM-MyCalendar", {
         fade: false,
         urgency: 7,
         timeFormat: "relative",
-        dateFormat: "DD MMM",
+        dateFormat: "DD MMM YYYY",
         dateEndFormat: "LT",
-        fullDayEventDateFormat: "DD MMM",
+        fullDayEventDateFormat: "DD MMM YYYY",
         showEnd: true,
         getRelative: 6,
         fadePoint: 0.25, // Start on 1/4th of the list.
