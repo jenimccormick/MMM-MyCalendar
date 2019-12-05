@@ -6,6 +6,10 @@
   width: 100%;
 }
 
+.MMM-MyCalendar header {
+  font-size: 30px;
+}
+
 .MMM-MyCalendar .symbol {
   width: 5%;
   vertical-align: top;
