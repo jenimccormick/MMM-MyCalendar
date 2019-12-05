@@ -1,5 +1,5 @@
 /*
- * MMM-MyCalendar.
+ * MMM-MyCalendar CSS.
  */
 
 .MMM-MyCalendar {
@@ -23,7 +23,7 @@
 }
 
 .MMM-MyCalendar .date {
-  width: 10%;
+  width: 12%;
   white-space: nowrap;
   vertical-align: top;
   text-align: left;
@@ -32,7 +32,7 @@
 }
 
 .MMM-MyCalendar .time {
-  width: 15%;
+  width: 13%;
   white-space: nowrap;
   vertical-align: top;
   text-align: right;
