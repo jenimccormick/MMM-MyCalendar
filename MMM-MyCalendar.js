@@ -194,8 +194,7 @@ Module.register("MMM-MyCalendar", {
             // ROW: calendar entry
             // ---------------------------------------------------------- //
             var oEventRow = document.createElement("tr");
-            oEventRow.className = "normal";
-            oEventRow.style.color = this.colorizeEventTitle(event.title);
+            oEventRow.className = "normal " + this.colorizeEventEntry(event.title);
 
 
             // ---------------------------------------------------------- //
@@ -468,27 +467,33 @@ Module.register("MMM-MyCalendar", {
 
     },
 
+	// ---------------------------------------------------------- //
+    /**
+     * Retrieves the Event Entry CSS classname.
+     *
+     * @param psEventTitle {string} - event title.
+     * @returns {string}
+     */
     // ---------------------------------------------------------- //
-    // ---------------------------------------------------------- //
-    colorizeEventTitle: function (psEventTitle) {
+    colorizeEventEntry: function (psEventTitle) {
 
         if (psEventTitle.indexOf("Community Reiki Clinic") > -1) {
-            return "lightgreen";
+            return "event1";
         }
         else if (psEventTitle.indexOf("Reiki Clinic") > -1) {
-            return "orange";
+            return "event2";
         }
         else if (psEventTitle.indexOf("Cancer Care Clinic") > -1) {
-            return "yellow";
+            return "event3";
         }
         else if (psEventTitle.indexOf("SSRC Meeting") > -1) {
-            return "magenta";
+            return "event4";
         }
         else if (psEventTitle.indexOf("Reiki Circle") > -1) {
-            return "lightblue";
+            return "event5";
         }
         else {
-            return "#fff";
+            return "";
         }
 
     },
