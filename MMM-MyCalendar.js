@@ -472,8 +472,11 @@ Module.register("MMM-MyCalendar", {
     // ---------------------------------------------------------- //
     colorizeEventTitle: function (psEventTitle) {
 
-        if (psEventTitle.indexOf("Reiki Clinic") > -1) {
+        if (psEventTitle.indexOf("Community Reiki Clinic") > -1) {
             return "lightgreen";
+        }
+        else if (psEventTitle.indexOf("Reiki Clinic") > -1) {
+            return "orange";
         }
         else if (psEventTitle.indexOf("Cancer Care Clinic") > -1) {
             return "yellow";
