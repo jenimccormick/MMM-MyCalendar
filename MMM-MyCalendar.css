@@ -45,6 +45,9 @@
   text-align: left;
 }
 
+.MMM-MyCalendar .event0 {
+  color: #F5F5F5;
+}
 .MMM-MyCalendar .event1 {
   color: orange;
 }
