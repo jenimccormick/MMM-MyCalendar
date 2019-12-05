@@ -493,7 +493,7 @@ Module.register("MMM-MyCalendar", {
             return "event5";
         }
         else {
-            return "";
+            return "event0";
         }
 
     },
