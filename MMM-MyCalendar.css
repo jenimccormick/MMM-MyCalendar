@@ -27,11 +27,10 @@
 }
 
 .MMM-MyCalendar .date {
-  width: 25%;
+  width: 30%;
   white-space: nowrap;
   vertical-align: top;
   text-align: left;
-  text-transform: uppercase;
   font-weight: bold;
 }
 
@@ -40,13 +39,13 @@
   white-space: nowrap;
   vertical-align: top;
   text-align: right;
-  padding-right: 35px;
 }
 
 .MMM-MyCalendar .title {
-  width: 55%;
+  width: 50%;
   vertical-align: top;
   text-align: left;
+  padding-left: 25px;
 }
 
 .MMM-MyCalendar .event0 {
