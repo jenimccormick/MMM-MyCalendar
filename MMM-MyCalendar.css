@@ -27,7 +27,7 @@
 }
 
 .MMM-MyCalendar .date {
-  width: 20%;
+  width: 25%;
   white-space: nowrap;
   vertical-align: top;
   text-align: left;
@@ -44,7 +44,7 @@
 }
 
 .MMM-MyCalendar .title {
-  width: 60%;
+  width: 55%;
   vertical-align: top;
   text-align: left;
 }
