@@ -44,3 +44,19 @@
   vertical-align: top;
   text-align: left;
 }
+
+.MMM-MyCalendar .event1 {
+  color: orange;
+}
+.MMM-MyCalendar .event2 {
+  color: yellow;
+}
+.MMM-MyCalendar .event3 {
+  color: lightgreen;
+}
+.MMM-MyCalendar .event4 {
+  color: lightblue;
+}
+.MMM-MyCalendar .event5 {
+  color: magenta;
+}
