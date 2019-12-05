@@ -23,7 +23,7 @@
 }
 
 .MMM-MyCalendar .date {
-  width: 15%;
+  width: 20%;
   white-space: nowrap;
   vertical-align: top;
   text-align: left;
@@ -40,7 +40,7 @@
 }
 
 .MMM-MyCalendar .title {
-  width: 65%;
+  width: 60%;
   vertical-align: top;
   text-align: left;
 }
@@ -49,7 +49,7 @@
   color: #F5F5F5;
 }
 .MMM-MyCalendar .event1 {
-  color: orange;
+  color: lightblue;
 }
 .MMM-MyCalendar .event2 {
   color: yellow;
@@ -58,7 +58,7 @@
   color: lightgreen;
 }
 .MMM-MyCalendar .event4 {
-  color: lightblue;
+  color: orange;
 }
 .MMM-MyCalendar .event5 {
   color: magenta;
