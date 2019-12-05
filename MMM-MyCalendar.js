@@ -9,29 +9,17 @@ Module.register("MMM-MyCalendar", {
     defaults: {
         maximumEntries: 25, // Total Maximum Entries
         maximumNumberOfDays: 365,
-        displaySymbol: true,
         defaultSymbol: "calendar", // Fontawesome Symbol see http://fontawesome.io/cheatsheet/
-        showLocation: false,
-        displayRepeatingCountTitle: false,
-        defaultRepeatingCountTitle: "",
         maxTitleLength: 35,
         wrapEvents: false, // wrap events to multiple lines breaking at maxTitleLength
         maxTitleLines: 3,
         fetchInterval: 5 * 60 * 1000, // Update every 5 minutes.
         animationSpeed: 2000,
         fade: false,
-        urgency: 7,
         timeFormat: "relative",
-        dateFormat: "DD MMM YYYY",
-        dateEndFormat: "LT",
-        fullDayEventDateFormat: "DD MMM YYYY",
-        showEnd: true,
-        getRelative: 6,
-        fadePoint: 0.25, // Start on 1/4th of the list.
+        dateFormat: "dddd, MMMM D",
         hidePrivate: false,
         hideOngoing: false,
-        colored: true,
-        coloredSymbolOnly: false,
         tableClass: "small",
         calendars: [
             {
@@ -46,8 +34,7 @@ Module.register("MMM-MyCalendar", {
         broadcastEvents: true,
         excludedEvents: [],
         sliceMultiDayEvents: false,
-        broadcastPastEvents: false,
-        nextDaysRelative: false
+        broadcastPastEvents: false
     },
 
     // ---------------------------------------------------------- //
@@ -73,10 +60,7 @@ Module.register("MMM-MyCalendar", {
     // ---------------------------------------------------------- //
     getTranslations: function () {
 
-        // The translations for the default modules are defined in the core translation files.
-        // Therefore we can just return false. Otherwise we should have returned a dictionary.
-        // If you're trying to build your own module including translations, check out the documentation.
-        return false;
+		return false;
 
     },
 
